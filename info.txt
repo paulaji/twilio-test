@@ -1,0 +1,2 @@
+pip install twilio // install the twilio module
+pip install python-dotenv // for auth tokens
