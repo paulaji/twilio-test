@@ -1,0 +1,5 @@
+curl.exe -X POST https ^
+  --data-urlencode "Url=http://demo.twilio.com/docs/voice.xml" ^
+  --data-urlencode "To=+verifiednumbercalltobemade" ^
+  --data-urlencode "From=+yourtwilionumber" ^
+  -u "authpart"
