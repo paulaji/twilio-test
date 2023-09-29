@@ -40,10 +40,10 @@
                 Disconnect</a></p>
     </div>
     <script>
-        // to store the call sid in a variable
+        // Global variable
         let callSid;
 
-        // connect
+        // Connect
         document.querySelector('.connect-button').addEventListener('click', function () {
             // Make an AJAX request to your Flask backend to initiate the call
             fetch('/make-call', {
@@ -55,12 +55,11 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data);
                     callSid = data.call_sid;
                     // Handle the response from the Flask application, e.g., show a success message
                     alert(data.message);
-                    console.log('callSid:', callSid);
-                    console.log('data.call_sid:', data.call_sid);
+                    // console.log('callSid:', callSid);
+                    // console.log('data.call_sid:', data.call_sid);
 
                 })
                 .catch(error => {
@@ -70,7 +69,7 @@
                 });
         });
 
-        // disconnect
+        // Disconnect
         document.querySelector('.disconnect-button').addEventListener('click', function () {
             // Make an AJAX request to your Flask backend to disconnect the call
             fetch('/disconnect-call', {
@@ -98,5 +97,4 @@
         integrity="sha384-NYPFq8S6rVvu7BE53VYBq/5QHSWb6g1DDoXTbPTo0eMR7NE2En1YnHa3Un6bpHoa2"
         crossorigin="anonymous"></script>
 </body>
-
 </html>
