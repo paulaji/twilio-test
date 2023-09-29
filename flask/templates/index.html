@@ -1,38 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CRM Customer</title>
+    <style>
+        .customer-entry {
+            background-color: #f0f0f0;
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .customer-name {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .customer-phone {
+            font-size: 14px;
+        }
+
+        .call-button {
+            text-decoration: none;
+            color: #007bff;
+            margin-left: 10px;
+        }
+    </style>
 </head>
+
 <body>
     <div class="customer-entry">
         <p class="customer-name">Customer Name: Pravin</p>
-        <p class="customer-phone">Customer Phone: <a href="javascript:void(0);" class="call-button"><i class="fas fa-phone"></i> Call</a></p>
+        <p class="customer-phone"><a href="javascript:void(0);" class="connect-button"><i class="fas fa-phone"></i>
+                Connect</a></p>
+        <p class="customer-phone"><a href="javascript:void(0);" class="disconnect-button"><i class="fas fa-phone"></i>
+                Disconnect</a></p>
     </div>
     <script>
-        document.querySelector('.call-button').addEventListener('click', function() {
+        // to store the call sid in a variable
+        let callSid;
+
+        // connect
+        document.querySelector('.connect-button').addEventListener('click', function () {
             // Make an AJAX request to your Flask backend to initiate the call
             fetch('/make-call', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ to_phone_number: 'phone number with country code without space' }) // Replace with the actual phone number
+                body: JSON.stringify({ to_phone_number: '+916282543120' }) // Replace with the actual phone number
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                // Handle the response from the Flask application, e.g., show a success message
-                alert(data.message);
-            })
-            .catch(error => {
-                console.error(error);
-                // Handle errors, e.g., display an error message
-                alert('Error initiating the call');
-            });
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    callSid = data.call_sid;
+                    // Handle the response from the Flask application, e.g., show a success message
+                    alert(data.message);
+                })
+                .catch(error => {
+                    console.error(error);
+                    // Handle errors, e.g., display an error message
+                    alert('Error initiating the call');
+                });
         });
+
+        // disconnect
+        document.querySelector('.disconnect-button').addEventListener('click', function () {
+            // Make an AJAX request to your Flask backend to disconnect the call
+            fetch('/disconnect-call', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ call_sid: callSid })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    // Handle the response from the Flask application, e.g., show a success message
+                    alert(data.message);
+                })
+                .catch(error => {
+                    console.error(error);
+                    // Handle errors, e.g., display an error message
+                    alert('Error disconnecting the call');
+                });
+        });
+
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js" integrity="sha384-NYPFq8S6rVvu7BE53VYBq/5QHSWb6g1DDoXTbPTo0eMR7NE2En1YnHa3Un6bpHoa2" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"
+        integrity="sha384-NYPFq8S6rVvu7BE53VYBq/5QHSWb6g1DDoXTbPTo0eMR7NE2En1YnHa3Un6bpHoa2"
+        crossorigin="anonymous"></script>
 </body>
+
 </html>
