@@ -1,27 +1,25 @@
 import os
 from dotenv import load_dotenv
-from twilio.rest import Client
 from flask import Flask, request, render_template, jsonify
 
-# Load environment variables from the .env file
+from twilio.rest import Client
+from twilio.twiml.voice_response import VoiceResponse
+
 load_dotenv()
 
 app = Flask(__name__)
 
-# Retrieve Twilio credentials from environment variables
 account_sid = os.getenv('TWILIO_ACCOUNT_SID')
 auth_token = os.getenv('TWILIO_AUTH_TOKEN')
 twilio_phone_number = os.getenv('TWILIO_PHONE_NUMBER')  # Your Twilio phone number
 
-# Create a Twilio client
 client = Client(account_sid, auth_token)
 
-# Define a route to render the HTML template
 @app.route('/')
 def index():
     return render_template('index.html')
 
-# Define a route to handle the AJAX call to initiate the call
+# connect call
 @app.route('/make-call', methods=['POST'])
 def make_call():
     try:
@@ -34,14 +32,36 @@ def make_call():
         # Create a call with a custom TwiML message
         call = client.calls.create(
             # twiml=f'<Response><Say>{custom_message}</Say></Response>',
-            twiml=f'<Response><Dial>dial a registered number here because twilio free only supports that</Dial></Response>',
+            twiml=f'<Response><Dial>+917548826361</Dial></Response>',
             to=to_phone_number,
             from_=twilio_phone_number
         )
 
-        return jsonify({'message': 'Call initiated successfully!', 'call_sid': call.sid})
+        # store the call sid in a variable to be passed in to the disconnect call route
+        call_sid = call.sid
+
+        return jsonify({'message': 'Call initiated successfully!', 'call_sid': call_sid})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+# disconnect call
+@app.route('/disconnect-call', methods=['POST'])
+def disconnect_call():
+    try:
+        # collect the call_sid
+        call_sid = request.json.get("call_sid")
+
+        response = VoiceResponse()
+        response.hangup()
+
+        # update the call status
+        call = client.calls(call_sid).update(
+            twiml=str(response)
+        )
+        return jsonify({'message': 'Call disconnected successfully!'})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
