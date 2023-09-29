@@ -15,17 +15,19 @@
         }
 
         .customer-name {
-            font-weight: bold;
-            font-size: 16px;
+            font-size: 2em;
+            font-weight: 300;
         }
 
-        .customer-phone {
-            font-size: 14px;
-        }
-
-        .call-button {
+        .connect-button {
             text-decoration: none;
-            color: #007bff;
+            color: #000;
+            margin-left: 10px;
+        }
+
+        .disconnect-button {
+            text-decoration: none;
+            color: #000;
             margin-left: 10px;
         }
     </style>
@@ -34,9 +36,9 @@
 <body>
     <div class="customer-entry">
         <p class="customer-name">Customer Name: Pravin</p>
-        <p class="customer-phone"><a href="javascript:void(0);" class="connect-button"><i class="fas fa-phone"></i>
+        <p class="customer-phone" style="background-color: rgba(0, 128, 0, 0.3); font-size: large;"><a href="javascript:void(0);" class="connect-button">
                 Connect</a></p>
-        <p class="customer-phone"><a href="javascript:void(0);" class="disconnect-button"><i class="fas fa-phone"></i>
+        <p class="customer-phone" style="background-color: rgba(128, 0, 0, 0.3); font-size: large;"><a href="javascript:void(0);" class="disconnect-button">
                 Disconnect</a></p>
     </div>
     <script>
@@ -81,7 +83,7 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data);
+                    // console.log(data);
                     // Handle the response from the Flask application, e.g., show a success message
                     alert(data.message);
                 })
@@ -93,8 +95,5 @@
         });
 
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"
-        integrity="sha384-NYPFq8S6rVvu7BE53VYBq/5QHSWb6g1DDoXTbPTo0eMR7NE2En1YnHa3Un6bpHoa2"
-        crossorigin="anonymous"></script>
 </body>
 </html>
