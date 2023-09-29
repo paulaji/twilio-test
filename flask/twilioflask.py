@@ -33,7 +33,8 @@ def make_call():
         
         # Create a call with a custom TwiML message
         call = client.calls.create(
-            twiml=f'<Response><Say>{custom_message}</Say></Response>',
+            # twiml=f'<Response><Say>{custom_message}</Say></Response>',
+            twiml=f'<Response><Dial>dial a registered number here because twilio free only supports that</Dial></Response>',
             to=to_phone_number,
             from_=twilio_phone_number
         )
