@@ -19,6 +19,10 @@ client = Client(account_sid, auth_token)
 def index():
     return render_template('index.html')
 
+# assigning a global callSid
+callSid = None
+call = None
+
 # connect call
 @app.route('/make-call', methods=['POST'])
 def make_call():
@@ -38,9 +42,9 @@ def make_call():
         )
 
         # store the call sid in a variable to be passed in to the disconnect call route
-        call_sid = call.sid
+        callSid = call.sid
 
-        return jsonify({'message': 'Call initiated successfully!', 'call_sid': call_sid})
+        return jsonify({'message': 'Call initiated successfully!', 'call_sid': callSid})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -50,6 +54,7 @@ def disconnect_call():
     try:
         # collect the call_sid
         call_sid = request.json.get("call_sid")
+        print(call_sid)
 
         response = VoiceResponse()
         response.hangup()
@@ -58,6 +63,7 @@ def disconnect_call():
         call = client.calls(call_sid).update(
             twiml=str(response)
         )
+        print(call)
         return jsonify({'message': 'Call disconnected successfully!'})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
