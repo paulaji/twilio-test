@@ -59,6 +59,9 @@
                     callSid = data.call_sid;
                     // Handle the response from the Flask application, e.g., show a success message
                     alert(data.message);
+                    console.log('callSid:', callSid);
+                    console.log('data.call_sid:', data.call_sid);
+
                 })
                 .catch(error => {
                     console.error(error);
